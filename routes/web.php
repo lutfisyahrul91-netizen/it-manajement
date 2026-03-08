@@ -65,8 +65,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/divisi', [DivisionController::class, 'indexAdmin'])->name('divisi');
         Route::get('/service', [ServiceController::class, 'indexAdmin'])->name('service');
 
+        // Rute untuk memproses form tambah data
+        Route::post('/monitor/store', [AssetController::class, 'storeMonitorAdmin'])->name('monitor.store');
+
         // route detail
-        Route::get('/monitor/{id}', [AssetController::class, 'showMonitorAdmin'])->name('monitor.show');
+        // Route::get('/monitor/{id}', [AssetController::class, 'showMonitorAdmin'])->name('monitor.show');
+        Route::get('/monitor/detail/{id}', [AssetController::class, 'showMonitorAdmin'])->where('id', '.*')->name('monitor.show');
+
+        // Rute untuk mengeksekusi penghapusan data
+        Route::delete('/monitor/hapus/{id}', [AssetController::class, 'destroyMonitorAdmin'])->name('monitor.destroy');
 
         //route import excel
         Route::post('/monitor/import-excel', [AssetController::class, 'importMonitorExcel'])->name('monitor.import');

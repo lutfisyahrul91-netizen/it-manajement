@@ -65,13 +65,18 @@ class AssetController extends Controller
         return view('admin.assets.eksternal', compact('eksternals'));
     }
 
-    // fumgsi show detail monitor di halaman admin
-   public function showMonitorAdmin($id)
-    {
-        $no_seri_asli = '#' . $id;
+    
 
-        // Mencari data monitor di database menggunakan Nomor Seri yang sudah utuh
-        $monitor = DB::table('monitor')->where('no_seri', $no_seri_asli)->first();
+    // fungsi show detail monitor di halaman admin
+    public function showMonitorAdmin($id)
+    {
+        // PERBAIKAN: Kita buat pencarian ganda.
+        // Cari data yang no_seri-nya SAMA PERSIS dengan $id (untuk data baru), 
+        // ATAU cari yang ada tambahan '#' di depannya (untuk data lama).
+        $monitor = DB::table('monitor')
+                    ->where('no_seri', $id)
+                    ->orWhere('no_seri', '#' . $id)
+                    ->first();
 
         if (!$monitor) {
             abort(404, 'Data Monitor tidak ditemukan');
@@ -79,6 +84,8 @@ class AssetController extends Controller
 
         return view('admin.assets.monitor_show', compact('monitor'));
     }
+
+    
 
 
 
@@ -110,6 +117,46 @@ class AssetController extends Controller
     {
         $eksternals = DB::table('perangkat_eksternal')->get();
         return view('it.assets.eksternal', compact('eksternals'));
+    }
+
+    public function storeMonitorAdmin(Request $request)
+    {
+        // 1. Validasi data yang dikirim dari form
+        $request->validate([
+            'no_seri' => 'required|unique:monitor,no_seri', // Mencegah duplikat nomor seri
+            'merk' => 'required|string|max:255',
+            'tahun_pengadaan' => 'required|integer',
+            'pemeliharaan' => 'nullable|date', // Bisa kosong jika belum pernah diservis
+            'jumlah' => 'required|integer',
+            'kondisi' => 'required|in:Baik,Pemeliharaan,Rusak',
+        ]);
+
+        // 2. Insert data ke dalam tabel database MySQL
+        DB::table('monitor')->insert([
+            // PERBAIKAN: Tambahkan trim() agar spasi yang tidak sengaja terketik dibuang
+            'no_seri' => trim($request->no_seri), 
+            'merk' => $request->merk,
+            'tahun_pengadaan' => $request->tahun_pengadaan,
+            'pemeliharaan' => $request->pemeliharaan,
+            'jumlah' => $request->jumlah,
+            'kondisi' => $request->kondisi,
+        ]);
+
+        // 3. Kembalikan ke halaman sebelumnya
+        return back()->with('success', 'Data Monitor Berhasil Ditambahkan!');
+    }
+    
+    // Fungsi untuk menghapus data monitor berdasarkan no_seri
+    public function destroyMonitorAdmin($id)
+    {
+        // Menghapus data berdasarkan no_seri (bisa membaca yang ada '#' maupun tidak)
+        DB::table('monitor')
+            ->where('no_seri', $id)
+            ->orWhere('no_seri', '#' . $id)
+            ->delete();
+
+        // Mengembalikan halaman dengan pesan sukses
+        return back()->with('success', 'Data Monitor Berhasil Dihapus!');
     }
 
     public function exportMonitorExcel() 
