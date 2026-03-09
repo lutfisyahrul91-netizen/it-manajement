@@ -13,7 +13,7 @@
 <body>
     <div class="header">
         <h2>LAPORAN DATA INVENTARIS MONITOR</h2>
-        <p>Dicetak pada: {{ date('d-m-Y H:i') }} | Oleh: {{ auth()->user()->nama_user }}</p>
+        <p>Dicetak pada: {{ date('d-m-Y') }} | Oleh: {{ auth()->user()->nama_user }}</p>
     </div>
     <table>
         <thead>

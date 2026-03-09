@@ -65,7 +65,45 @@ class AssetController extends Controller
         return view('admin.assets.eksternal', compact('eksternals'));
     }
 
-    
+    public function storeMonitorAdmin(Request $request)
+    {
+        // 1. Validasi data yang dikirim dari form
+        $request->validate([
+            'no_seri' => 'required|unique:monitor,no_seri', // Mencegah duplikat nomor seri
+            'merk' => 'required|string|max:255',
+            'tahun_pengadaan' => 'required|integer',
+            'pemeliharaan' => 'nullable|date', // Bisa kosong jika belum pernah diservis
+            'jumlah' => 'required|integer',
+            'kondisi' => 'required|in:Baik,Pemeliharaan,Rusak',
+        ]);
+
+        // 2. Insert data ke dalam tabel database MySQL
+        DB::table('monitor')->insert([
+            // PERBAIKAN: Tambahkan trim() agar spasi yang tidak sengaja terketik dibuang
+            'no_seri' => trim($request->no_seri), 
+            'merk' => $request->merk,
+            'tahun_pengadaan' => $request->tahun_pengadaan,
+            'pemeliharaan' => $request->pemeliharaan,
+            'jumlah' => $request->jumlah,
+            'kondisi' => $request->kondisi,
+        ]);
+
+        // 3. Kembalikan ke halaman sebelumnya
+        return back()->with('success', 'Data Monitor Berhasil Ditambahkan!');
+    }
+
+    // Fungsi untuk menghapus data monitor berdasarkan no_seri
+    public function destroyMonitorAdmin($id)
+    {
+        // Menghapus data berdasarkan no_seri (bisa membaca yang ada '#' maupun tidak)
+        DB::table('monitor')
+            ->where('no_seri', $id)
+            ->orWhere('no_seri', '#' . $id)
+            ->delete();
+
+        // Mengembalikan halaman dengan pesan sukses
+        return back()->with('success', 'Data Monitor Berhasil Dihapus!');
+    }
 
     // fungsi show detail monitor di halaman admin
     public function showMonitorAdmin($id)
@@ -119,72 +157,19 @@ class AssetController extends Controller
         return view('it.assets.eksternal', compact('eksternals'));
     }
 
-    public function storeMonitorAdmin(Request $request)
-    {
-        // 1. Validasi data yang dikirim dari form
-        $request->validate([
-            'no_seri' => 'required|unique:monitor,no_seri', // Mencegah duplikat nomor seri
-            'merk' => 'required|string|max:255',
-            'tahun_pengadaan' => 'required|integer',
-            'pemeliharaan' => 'nullable|date', // Bisa kosong jika belum pernah diservis
-            'jumlah' => 'required|integer',
-            'kondisi' => 'required|in:Baik,Pemeliharaan,Rusak',
-        ]);
-
-        // 2. Insert data ke dalam tabel database MySQL
-        DB::table('monitor')->insert([
-            // PERBAIKAN: Tambahkan trim() agar spasi yang tidak sengaja terketik dibuang
-            'no_seri' => trim($request->no_seri), 
-            'merk' => $request->merk,
-            'tahun_pengadaan' => $request->tahun_pengadaan,
-            'pemeliharaan' => $request->pemeliharaan,
-            'jumlah' => $request->jumlah,
-            'kondisi' => $request->kondisi,
-        ]);
-
-        // 3. Kembalikan ke halaman sebelumnya
-        return back()->with('success', 'Data Monitor Berhasil Ditambahkan!');
-    }
     
-    // Fungsi untuk menghapus data monitor berdasarkan no_seri
-    public function destroyMonitorAdmin($id)
-    {
-        // Menghapus data berdasarkan no_seri (bisa membaca yang ada '#' maupun tidak)
-        DB::table('monitor')
-            ->where('no_seri', $id)
-            ->orWhere('no_seri', '#' . $id)
-            ->delete();
-
-        // Mengembalikan halaman dengan pesan sukses
-        return back()->with('success', 'Data Monitor Berhasil Dihapus!');
-    }
 
     public function exportMonitorExcel() 
     {
-        $data = DB::table('monitor')->get();
-        return Excel::download(new class($data) implements FromCollection, WithHeadings {
-            private $data;
-            
-            public function __construct($data) { 
-                $this->data = $data; 
-            }
-            
-            public function collection() { 
-                return $this->data; 
-            }
-            
-            public function headings(): array {
-                return ["No. Seri", "Merk", "Tahun Pengadaan", "Pemeliharaan", "Jumlah", "Kondisi"];
-            }
-        }, 'Laporan_Monitor_IT.xlsx');
+        // Tambahkan \App\Exports\ di depan MonitorExport agar Laravel tahu persis lokasinya
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\MonitorExport, 'Laporan_Monitor_IT.xlsx');
     }
-
     public function exportMonitorPdf()
     {
-        // Pastikan query ini menghasilkan data (Coba tes dengan dd($monitors) jika perlu)
+        // query ini menghasilkan data (Coba tes dengan dd($monitors) jika perlu)
         $monitors = DB::table('monitor')->get();
 
-        // Pastikan nama variabel di compact('monitors') SAMA dengan yang di-foreach
+        // nama variabel di compact('monitors') SAMA dengan yang di-foreach
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('it.assets.monitor_pdf', compact('monitors'));
     
         return $pdf->stream('Laporan_Monitor_IT.pdf');

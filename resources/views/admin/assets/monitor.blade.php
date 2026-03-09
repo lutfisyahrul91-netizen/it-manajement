@@ -19,11 +19,8 @@
                     <i class='bx bx-search' style="color: #9E9E9E;"></i>
                     <input type="text" placeholder="Search monitor..." style="border: none; background: transparent; outline: none; font-family: 'Montserrat'; font-size: 12px; color: #9E9E9E; width: 100%;">
                 </div>
-            </div>
+            </div> 
 
-            <!-- <button style="background: #D30007; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-family: 'Montserrat'; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s;" onmouseover="this.style.background='#b00006'" onmouseout="this.style.background='#D30007'">
-                <i class='bx bx-plus' style="font-size: 16px;"></i> Tambahkan Monitor
-            </button> -->
             <div style="display: flex; gap: 12px; align-items: center;">
     
                 <button onclick="document.getElementById('modalImport').style.display='flex'" style="background: #1F9254; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-family: 'Montserrat'; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
@@ -35,7 +32,6 @@
                 </button>
 
             </div>
-
             <div id="modalImport" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
                     <div style="background: white; padding: 32px; border-radius: 12px; width: 400px; box-shadow: 0px 10px 30px rgba(0,0,0,0.1);">
                         <h3 style="margin-top: 0; font-family: 'Montserrat'; font-weight: 700;">Import Data Monitor</h3>
