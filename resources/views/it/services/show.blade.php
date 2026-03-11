@@ -1,7 +1,11 @@
 @extends('layouts.it_support')
 
 @section('content')
-<form action="#" method="POST" style="display: flex; flex-direction: column; gap: 24px; font-family: 'Inter', sans-serif;">
+<form action="{{ route('it.service.update', str_replace('#', '', $service->kode_pinjam)) }}" method="POST" style="display: flex; flex-direction: column; gap: 24px; font-family: 'Inter', sans-serif;">
+    
+    @csrf
+    @method('PUT')
+
     <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0px 4px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 32px;">
         
         <div style="display: flex; gap: 24px; flex-wrap: wrap;">
@@ -43,9 +47,9 @@
 
             <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px; justify-content: space-between;">
                 
-                <div style="background: #FAFAFA; border-radius: 8px; padding: 16px; height: 100%; min-height: 269px; color: #21252B; display: flex; flex-direction: column; gap: 8px; border: 1px solid #E9EAEC; box-sizing: border-box;">
+                <div style="background: #FAFAFA; border-radius: 8px; padding: 16px; height: 100%; min-height: 269px; max-height: 269px; overflow-y: auto; color: #21252B; display: flex; flex-direction: column; gap: 8px; border: 1px solid #E9EAEC; box-sizing: border-box;">
                     <span style="font-size: 12px; font-weight: 600; color: #657081;">Update Service Terakhir:</span>
-                    <span style="font-size: 14px; line-height: 1.5;">{{ $service->catatan_service ?? 'Belum ada riwayat update service untuk perangkat ini.' }}</span>
+                    <span style="font-size: 14px; line-height: 1.5; white-space: pre-wrap;">{{ $service->riwayat_service ?? 'Belum ada riwayat update service untuk perangkat ini.' }}</span>
                 </div>
                 
                 <div style="background: #FAFAFA; border-radius: 8px; padding: 0 16px; height: 48px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #E9EAEC; box-sizing: border-box;">
@@ -59,8 +63,8 @@
         <div style="display: flex; flex-direction: column; gap: 20px;">
             
             <div style="background: #FAFAFA; border-radius: 8px; padding: 16px; height: 158px; display: flex; flex-direction: column; gap: 8px; border: 1px solid #E9EAEC; box-sizing: border-box;">
-                <span style="font-size: 12px; font-weight: 600; color: #657081;">Update Progress Service Baru</span>
-                <textarea name="catatan_service_baru" placeholder="Isikan detail tindakan perbaikan di sini..." style="width: 100%; height: 100%; border: none; background: transparent; outline: none; font-family: 'Inter'; color: #21252B; resize: none; font-size: 14px;"></textarea>
+                <span style="font-size: 12px; font-weight: 600; color: #657081;">Update Progress Service Baru <span style="color: red;">*</span></span>
+                <textarea name="catatan_service_baru" required placeholder="Isikan detail tindakan perbaikan di sini..." style="width: 100%; height: 100%; border: none; background: transparent; outline: none; font-family: 'Inter'; color: #21252B; resize: none; font-size: 14px;"></textarea>
             </div>
             
             <div style="background: #F3F3F3; border-radius: 8px; padding: 0 16px; height: 60px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #E9EAEC; box-sizing: border-box;">

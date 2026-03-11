@@ -67,7 +67,7 @@ class AssetController extends Controller
 
     public function storeMonitorAdmin(Request $request)
     {
-        // 1. Validasi data yang dikirim dari form
+        // Validasi data yang dikirim dari form
         $request->validate([
             'no_seri' => 'required|unique:monitor,no_seri', // Mencegah duplikat nomor seri
             'merk' => 'required|string|max:255',
@@ -77,7 +77,7 @@ class AssetController extends Controller
             'kondisi' => 'required|in:Baik,Pemeliharaan,Rusak',
         ]);
 
-        // 2. Insert data ke dalam tabel database MySQL
+        // Insert data ke dalam tabel database MySQL
         DB::table('monitor')->insert([
             // PERBAIKAN: Tambahkan trim() agar spasi yang tidak sengaja terketik dibuang
             'no_seri' => trim($request->no_seri), 
@@ -88,7 +88,7 @@ class AssetController extends Controller
             'kondisi' => $request->kondisi,
         ]);
 
-        // 3. Kembalikan ke halaman sebelumnya
+        // Kembalikan ke halaman sebelumnya
         return back()->with('success', 'Data Monitor Berhasil Ditambahkan!');
     }
 
@@ -157,13 +157,56 @@ class AssetController extends Controller
         return view('it.assets.eksternal', compact('eksternals'));
     }
 
-    
+    public function updateServiceIT(Request $request, $id)
+    {
+        // Validasi teks tidak boleh kosong
+        $request->validate([
+            'catatan_service_baru' => 'required|string',
+        ]);
 
+        // Pastikan ID berawalan '#' untuk dicocokkan di database
+        $kode_pinjam = str_starts_with($id, '#') ? $id : '#' . $id;
+        $serviceLama = DB::table('service')->where('kode_pinjam', $kode_pinjam)->first();
+
+        if (!$serviceLama) {
+            return back()->with('error', 'Data Service tidak ditemukan!');
+        }
+
+        // Stempel Waktu & Penggabungan Teks
+        date_default_timezone_set('Asia/Jakarta');
+        $waktuSekarang = date('d-m-Y H:i:s');
+        
+        // catat nama IT yang mengerjakan progres tersebut
+        $namaIT = $request->ditangani_oleh; 
+        
+        // Format untuk tampilan riwayat
+        $teksBaru = "[" . $waktuSekarang . " | Oleh: " . $namaIT . "]\n" . $request->catatan_service_baru;
+
+        // Tumpuk teks baru di atas teks lama
+        if (!empty($serviceLama->riwayat_service)) {
+            $riwayatGabungan = $teksBaru . "\n\n" . $serviceLama->riwayat_service;
+        } else {
+            $riwayatGabungan = $teksBaru;
+        }
+
+        // Update data ke database (update riwayat dan siapa yang menangani)
+        DB::table('service')->where('kode_pinjam', $kode_pinjam)->update([
+            'riwayat_service' => $riwayatGabungan,
+            'ditangani_oleh' => $namaIT      
+        ]);
+
+        return back()->with('success', 'Progress perbaikan berhasil diupdate!');
+    }
+
+    
+    //masih eror
     public function exportMonitorExcel() 
     {
         // Tambahkan \App\Exports\ di depan MonitorExport agar Laravel tahu persis lokasinya
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\MonitorExport, 'Laporan_Monitor_IT.xlsx');
     }
+
+    
     public function exportMonitorPdf()
     {
         // query ini menghasilkan data (Coba tes dengan dd($monitors) jika perlu)

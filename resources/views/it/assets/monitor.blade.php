@@ -22,83 +22,81 @@
                 </div>
             </div>
 
-           <div style="display: flex; gap: 12px; align-items: center;">
-            <div style="position: relative; display: inline-block;" onmouseover="this.querySelector('.dropdown-content').style.display='block'" onmouseout="this.querySelector('.dropdown-content').style.display='none'">
-                <button style="background: #21252B; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-family: 'Montserrat'; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                    <i class='bx bx-export'></i> Export <i class='bx bx-chevron-down'></i>
-                </button>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="position: relative; display: inline-block;" onmouseover="this.querySelector('.dropdown-content').style.display='block'" onmouseout="this.querySelector('.dropdown-content').style.display='none'">
+                    <button style="background: #21252B; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-family: 'Montserrat'; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-export'></i> Export <i class='bx bx-chevron-down'></i>
+                    </button>
         
-                <div class="dropdown-content" style="display: none; position: absolute; right: 0; background-color: white; min-width: 160px; box-shadow: 0px 8px 16px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100; border: 1px solid #E9EAEC; overflow: hidden;">
-                    <a href="{{ route('it.monitor.excel') }}" style="color: #21252B; padding: 12px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='#F7F6FE'" onmouseout="this.style.background='white'">
-                        <i class='bx bxs-file-json' style="color: #1F9254;"></i> Export Excel
-                    </a>
-                    <a href="{{ route('it.monitor.pdf') }}" target="_blank" style="color: #21252B; padding: 12px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='#F7F6FE'" onmouseout="this.style.background='white'">
-                        <i class='bx bxs-file-pdf' style="color: #D30007;"></i> Export PDF
-                    </a>
-                </div>
-                </div>
+                    <div class="dropdown-content" style="display: none; position: absolute; right: 0; background-color: white; min-width: 160px; box-shadow: 0px 8px 16px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100; border: 1px solid #E9EAEC; overflow: hidden;">
+                        <a href="{{ route('it.monitor.excel') }}" style="color: #21252B; padding: 12px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='#F7F6FE'" onmouseout="this.style.background='white'">
+                            <i class='bx bxs-file-json' style="color: #1F9254;"></i> Export Excel
+                        </a>
+                        <a href="{{ route('it.monitor.pdf') }}" target="_blank" style="color: #21252B; padding: 12px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='#F7F6FE'" onmouseout="this.style.background='white'">
+                            <i class='bx bxs-file-pdf' style="color: #D30007;"></i> Export PDF
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
 
         <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; min-width: 900px;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0 12px; min-width: 900px; margin-top: -12px;">
                 <thead>
-                    <tr style="text-align: left; border-bottom: 1px solid #E9EAEC;">
-                        <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black; text-align: center;">No. Seri</th>
-                        <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black;">Merk</th>
-                        <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black;">Tahun Pengadaan</th>
-                        <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black;">Pemeliharaan</th>
-                        <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black;">Jumlah</th>
-                        <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black;">Kondisi</th>
-                        <!-- <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black; text-align: center;">Action</th> -->
+                    <tr style="text-align: left;">
+                        <th style="padding: 16px; font-size: 13px; font-weight: 700; color: #21252B; text-align: center;">No. Seri</th>
+                        <th style="padding: 16px; font-size: 13px; font-weight: 700; color: #21252B;">Merk</th>
+                        <th style="padding: 16px; font-size: 13px; font-weight: 700; color: #21252B;">Tahun Pengadaan</th>
+                        <th style="padding: 16px; font-size: 13px; font-weight: 700; color: #21252B;">Pemeliharaan</th>
+                        <th style="padding: 16px; font-size: 13px; font-weight: 700; color: #21252B; text-align: center;">Jumlah</th>
+                        <th style="padding: 16px; font-size: 13px; font-weight: 700; color: #21252B;">Kondisi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($monitors as $item)
-                    <tr style="background: {{ $loop->index % 2 == 0 ? '#F7F6FE' : 'white' }}; border-bottom: 1px solid #E9EAEC;">
+                    <tr style="background: {{ $loop->index % 2 == 0 ? '#F9F9FB' : 'white' }}; box-shadow: {{ $loop->index % 2 == 0 ? 'none' : '0px 2px 10px rgba(0,0,0,0.02)' }};">
                         
-                        <td style="padding: 16px; font-size: 14px; font-weight: 500; text-align: center; color: black;">{{ $item->no_seri }}</td>
-                        <td style="padding: 16px; font-size: 14px; font-weight: 500; color: black; display: flex; align-items: center; gap: 8px;">
-                            <div style="width: 32px; height: 32px; background: #C4C4C4; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                <i class='bx bx-desktop' style="color: white; font-size: 16px;"></i>
+                        <td style="padding: 16px; font-size: 14px; font-weight: 600; text-align: center; color: #21252B; border-top-left-radius: 8px; border-bottom-left-radius: 8px;">
+                            {{ $item->no_seri }}
+                        </td>
+                        
+                        <td style="padding: 16px; font-size: 14px; font-weight: 500; color: #21252B; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 36px; height: 36px; background: #E9EAEC; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <i class='bx bx-desktop' style="color: #9E9E9E; font-size: 20px;"></i>
                             </div>
                             {{ $item->merk }}
                         </td>
-                        <td style="padding: 16px; font-size: 14px; font-weight: 500; color: black;">{{ $item->tahun_pengadaan }}</td>
-                        <td style="padding: 16px; font-size: 14px; font-weight: 500; color: black;">{{ $item->pemeliharaan }}</td>
-                        <td style="padding: 16px;">
-                            <span style="background: #EBF9F1; color: #1F9254; font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 20px;">
-                                {{ $item->jumlah }}
-                            </span>
+                        
+                        <td style="padding: 16px; font-size: 14px; font-weight: 600; color: #21252B;">
+                            {{ $item->tahun_pengadaan }}
                         </td>
-                        <td style="padding: 16px;">
+                        
+                        <td style="padding: 16px; font-size: 14px; font-weight: 600; color: #21252B;">
+                            {{ $item->pemeliharaan ?: '-' }}
+                        </td>
+                        
+                        <td style="padding: 16px; text-align: center;">
+                            <div style="display: inline-flex; justify-content: center; align-items: center; width: 28px; height: 28px; background: #EBF9F1; color: #1F9254; font-size: 13px; font-weight: 700; border-radius: 50%;">
+                                {{ $item->jumlah }}
+                            </div>
+                        </td>
+                        
+                        <td style="padding: 16px; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
                             @if($item->kondisi == 'Baik')
-                                <span style="background: #EBF9F1; color: #1F9254; font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 20px;">Baik</span>
+                                <span style="background: #EBF9F1; color: #1F9254; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px;">Baik</span>
                             @elseif($item->kondisi == 'Pemeliharaan')
-                                <span style="background: #FEF2E5; color: #CD6200; font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 20px;">Pemeliharaan</span>
+                                <span style="background: #FEF2E5; color: #CD6200; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px;">Pemeliharaan</span>
                             @else
-                                <span style="background: #FBE7E8; color: #A30D11; font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 20px;">Rusak</span>
+                                <span style="background: #FBE7E8; color: #A30D11; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px;">Rusak</span>
                             @endif
                         </td>
-                        <!-- <td style="padding: 16px; text-align: center;">
-                            <div style="display: flex; justify-content: center; gap: 12px;">
-                                <a href="#" style="text-decoration: none; width: 24px; height: 24px; background: transparent; border: 2px solid #624DE3; border-radius: 4px; display: flex; justify-content: center; align-items: center; transition: background 0.2s;" onmouseover="this.style.background='#624DE3'; this.children[0].style.color='white';" onmouseout="this.style.background='transparent'; this.children[0].style.color='#624DE3';">
-                                    <i class='bx bx-edit-alt' style="color: #624DE3; font-size: 14px; transition: color 0.2s;"></i>
-                                </a>
-                                <button style="width: 24px; height: 24px; background: transparent; border: 2px solid #A30D11; border-radius: 4px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.2s;" onmouseover="this.style.background='#A30D11'; this.children[0].style.color='white';" onmouseout="this.style.background='transparent'; this.children[0].style.color='#A30D11';">
-                                    <i class='bx bx-trash' style="color: #A30D11; font-size: 14px; transition: color 0.2s;"></i>
-                                </button>
-                            </div>
-                        </td> -->
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 24px;">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px;">
             <span style="color: #9E9E9E; font-size: 12px; font-weight: 500;">Previous</span>
             <div style="padding: 8px 12px; background: #624DE3; color: white; border-radius: 8px; font-size: 12px; font-weight: 500;">1</div>
             <div style="padding: 8px 12px; background: #E0E0E0; color: black; border-radius: 8px; font-size: 12px; font-weight: 500;">2</div>

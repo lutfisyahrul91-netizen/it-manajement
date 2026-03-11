@@ -94,10 +94,14 @@ Route::middleware(['auth'])->group(function () {
         
         // route detail
         Route::get('/service/{id}', [ServiceController::class, 'show'])->name('service.show');
+        // Rute untuk memproses update progress service
+        Route::put('/service/update/{id}', [AssetController::class, 'updateServiceIT'])->name('service.update');
 
         // route eksport excel/ pdf
         Route::get('/monitor/export-excel', [AssetController::class, 'exportMonitorExcel'])->name('monitor.excel');
         Route::get('/monitor/export-pdf', [AssetController::class, 'exportMonitorPdf'])->name('monitor.pdf');
+
+
     });
 
 
