@@ -14,6 +14,8 @@
         a { text-decoration: none; }
         * { box-sizing: border-box; }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body>
     <div style="display: flex; width: 100vw; height: 100vh;">

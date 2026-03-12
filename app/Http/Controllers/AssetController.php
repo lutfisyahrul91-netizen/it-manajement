@@ -18,17 +18,51 @@ class AssetController extends Controller
     // ==========================================
     public function importMonitorExcel(Request $request)
     {
-        // Validasi file
+        // 1. Validasi diperlonggar agar tidak mudah menolak file asli
         $request->validate([
-        'file_excel' => 'required|mimes:xlsx,xls'
+            'file_excel' => 'required|file|max:10240' // Maksimal 10MB
+        ], [
+            'file_excel.required' => 'Anda belum memilih file Excel!',
+            'file_excel.file' => 'File yang diupload tidak valid.',
+            'file_excel.max' => 'Ukuran file maksimal adalah 10 MB.'
         ]);
 
-        // Proses Import
-        Excel::import(new MonitorImport, $request->file('file_excel'));
-        return back()->with('success', 'Data Monitor Berhasil Diimport!');
-    }
-   
+        try {
+            // 2. Proses Import
+            Excel::import(new MonitorImport, $request->file('file_excel'));
+            
+            // 3. Jika sukses, kembali dengan pesan hijau
+            return back()->with('success', 'Berhasil! Data Monitor baru sudah ditambahkan tanpa duplikat.');
 
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            // Jika isi file Excel tidak sesuai format (misal nama kolom salah)
+            return back()->withErrors('Format kolom di dalam Excel tidak sesuai. Pastikan baris pertama berisi: no_seri, merk, tahun_pengadaan, dll.');
+        } catch (\Exception $e) {
+            // Jika ada error sistem lainnya
+            return back()->withErrors('Terjadi kesalahan saat membaca file: ' . $e->getMessage());
+        }
+    }
+
+    // public function exportMonitorExcelAdmin() 
+    // {
+    //     //  format file (MonitorExport) 
+    //     return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\MonitorExport, 'Laporan_Monitor_Admin.xlsx');
+    // }
+
+    // public function exportMonitorPdfAdmin()
+    // {
+    //     // Ambil semua data monitor dari database
+    //     $monitors = DB::table('monitor')->get();
+
+    //     // 2. Load file desain PDF-nya
+    //     // CATATAN: Jika desain tabel PDF Admin dan IT sama persis, 
+    //     // Anda bisa langsung memakai 'it.assets.monitor_pdf' agar tidak perlu membuat file baru.
+    //     // Tapi di sini saya tuliskan untuk folder admin agar lebih rapi.
+    //     $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.assets.monitor_pdf', compact('monitors'));
+    
+    //     // 3. Tampilkan PDF di browser
+    //     return $pdf->stream('Laporan_Monitor_Admin.pdf');
+    // }
 
     public function laptopAdmin()
     {
@@ -130,6 +164,49 @@ class AssetController extends Controller
     // ==========================================
     // 2. HALAMAN UNTUK ROLE IT SUPPORT
     // ==========================================
+
+    public function searchGlobalIT(Request $request)
+    {
+        // 1. Tangkap kata kunci dari kotak pencarian
+        $keyword = $request->input('keyword');
+
+        // Jika user menekan Enter tapi kotaknya kosong, kembalikan ke dashboard
+        if (empty($keyword)) {
+            return back();
+        }
+
+        // 2. Lakukan pencarian "Menyeluruh" ke 4 tabel menggunakan fitur LIKE dari SQL
+        $hasilMonitor = DB::table('monitor')
+            ->where('no_seri', 'LIKE', "%{$keyword}%")
+            ->orWhere('merk', 'LIKE', "%{$keyword}%")
+            ->get();
+
+        $hasilLaptop = DB::table('laptop')
+            ->where('no_seri', 'LIKE', "%{$keyword}%")
+            ->orWhere('merk', 'LIKE', "%{$keyword}%")
+            ->get();
+
+        $hasilPc = DB::table('pc')
+            ->where('no_seri', 'LIKE', "%{$keyword}%")
+            ->orWhere('merk', 'LIKE', "%{$keyword}%")
+            ->get();
+
+        $hasilEksternal = DB::table('perangkat_eksternal')
+            ->where('no_seri', 'LIKE', "%{$keyword}%")
+            ->orWhere('merk', 'LIKE', "%{$keyword}%")
+            ->get();
+
+        // 3. Kirim semua hasil temuan ke sebuah halaman View 
+        // (Anda bisa membuat file view baru bernama 'search_results.blade.php' di folder IT)
+        return view('it.search_results', compact(
+            'keyword', 
+            'hasilMonitor', 
+            'hasilLaptop', 
+            'hasilPc', 
+            'hasilEksternal'
+        ));
+    }
+
     public function laptop()
     {
         $laptops = DB::table('laptop')->get();

@@ -11,14 +11,15 @@
             <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 12px; font-weight: 500; color: black;">Show</span>
-                    <select style="background: #E0E0E0; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; outline: none; color: black;">
-                        <option>10</option>
+                    <select id="entriesSelect" style="background: #E0E0E0; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; outline: none; color: black;">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
                     </select>
                     <span style="font-size: 12px; font-weight: 500; color: black;">entries</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #9E9E9E; padding: 8px 12px; border-radius: 8px; width: 250px;">
                     <i class='bx bx-search' style="color: #9E9E9E;"></i>
-                    <input type="text" placeholder="Search monitor..." style="border: none; background: transparent; outline: none; font-family: 'Montserrat'; font-size: 12px; color: #9E9E9E; width: 100%;">
+                    <input type="text" id="searchInput" placeholder="Search monitor..." style="border: none; background: transparent; outline: none; font-family: 'Montserrat'; font-size: 12px; color: #9E9E9E; width: 100%;">
                 </div>
             </div>
 
@@ -52,7 +53,7 @@
                         <th style="padding: 16px; font-size: 13px; font-weight: 700; color: #21252B;">Kondisi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableBody">
                     @foreach($monitors as $item)
                     <tr style="background: {{ $loop->index % 2 == 0 ? '#F9F9FB' : 'white' }}; box-shadow: {{ $loop->index % 2 == 0 ? 'none' : '0px 2px 10px rgba(0,0,0,0.02)' }};">
                         
@@ -96,13 +97,12 @@
             </table>
         </div>
 
-        <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px;">
-            <span style="color: #9E9E9E; font-size: 12px; font-weight: 500;">Previous</span>
-            <div style="padding: 8px 12px; background: #624DE3; color: white; border-radius: 8px; font-size: 12px; font-weight: 500;">1</div>
-            <div style="padding: 8px 12px; background: #E0E0E0; color: black; border-radius: 8px; font-size: 12px; font-weight: 500;">2</div>
-            <span style="color: #9E9E9E; font-size: 12px; font-weight: 500;">Next</span>
+        <div id="paginationContainer" style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 24px;">
         </div>
 
     </div>
 </div>
+
+<script src="{{ asset('resource/js/table-filter.js') }}"></script>
+
 @endsection

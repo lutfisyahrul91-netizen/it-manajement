@@ -1,6 +1,24 @@
 @extends('layouts.admin')
 
 @section('content')
+
+@if(session('success'))
+    <div style="background: #EBF9F1; color: #1F9254; padding: 16px; border-radius: 8px; margin-bottom: 24px; font-family: 'Montserrat'; font-weight: 600; border: 1px solid #1F9254;">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if($errors->any())
+    <div style="background: #FBE7E8; color: #A30D11; padding: 16px; border-radius: 8px; margin-bottom: 24px; font-family: 'Montserrat'; font-weight: 600; border: 1px solid #A30D11;">
+        Terjadi Kesalahan:
+        <ul style="margin-top: 8px; margin-bottom: 0;">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div style="font-family: 'Montserrat', sans-serif;">
 
     <div style="background: white; padding: 24px; border-radius: 8px; box-shadow: 0px 4px 20px rgba(0,0,0,0.05);">
@@ -10,14 +28,15 @@
             <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 12px; font-weight: 500; color: black;">Show</span>
-                    <select style="background: #E0E0E0; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; outline: none; color: black;">
-                        <option>10</option>
+                    <select id="entriesSelect" style="background: #E0E0E0; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; outline: none; color: black;">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
                     </select>
                     <span style="font-size: 12px; font-weight: 500; color: black;">entries</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #9E9E9E; padding: 8px 12px; border-radius: 8px; width: 250px;">
                     <i class='bx bx-search' style="color: #9E9E9E;"></i>
-                    <input type="text" placeholder="Search monitor..." style="border: none; background: transparent; outline: none; font-family: 'Montserrat'; font-size: 12px; color: #9E9E9E; width: 100%;">
+                    <input type="text" id="searchInput" placeholder="Search monitor..." style="border: none; background: transparent; outline: none; font-family: 'Montserrat'; font-size: 12px; color: #9E9E9E; width: 100%;">
                 </div>
             </div> 
 
@@ -63,7 +82,7 @@
                         <th style="padding: 16px; font-size: 14px; font-weight: 700; color: black; text-align: center;">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableBody">
                     @foreach($monitors as $item)
                     <tr style="background: {{ $loop->index % 2 == 0 ? '#F7F6FE' : 'white' }}; border-bottom: 1px solid #E9EAEC;">
                         
@@ -111,12 +130,8 @@
             </table>
         </div>
 
-        <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 24px;">
-            <span style="color: #9E9E9E; font-size: 12px; font-weight: 500;">Previous</span>
-            <div style="padding: 8px 12px; background: #624DE3; color: white; border-radius: 8px; font-size: 12px; font-weight: 500;">1</div>
-            <div style="padding: 8px 12px; background: #E0E0E0; color: black; border-radius: 8px; font-size: 12px; font-weight: 500;">2</div>
-            <span style="color: #9E9E9E; font-size: 12px; font-weight: 500;">Next</span>
-        </div>
+        <div id="paginationContainer" style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 24px;">
+            </div>
 
     </div>
 </div>
@@ -172,4 +187,7 @@
         </form>
     </div>
 </div>
+
+<script src="{{ asset('resource/js/table-filter.js') }}"></script>
+
 @endsection

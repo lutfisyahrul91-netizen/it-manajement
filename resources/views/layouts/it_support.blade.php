@@ -17,7 +17,10 @@
             overflow: hidden; 
         }
         a { text-decoration: none; }
+        /* helper class used by search script */
+        .hidden { display: none; }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
@@ -94,9 +97,9 @@
             
             <div style="height: 96px; background: white; border-bottom: 1px solid #E9EAEC; display: flex; justify-content: space-between; align-items: center; padding: 0 32px; flex-shrink: 0;">
                 
-                <div style="width: 320px; height: 40px; background: #FAFAFA; border-radius: 8px; display: flex; align-items: center; padding: 0 16px; gap: 10px;">
+                <div style="position: relative; width: 320px; height: 40px; background: #FAFAFA; border-radius: 8px; display: flex; align-items: center; padding: 0 16px; gap: 10px;">
                     <i class='bx bx-search' style="font-size: 18px; color: #21252B;"></i>
-                    <input type="text" placeholder="Search" style="border: none; background: transparent; outline: none; width: 100%; color: #B8BDC5; font-family: Inter; font-size: 14px;">
+                    <input id="general-search-input" type="text" placeholder="Search" style="border: none; background: transparent; outline: none; width: 100%; color: #B8BDC5; font-family: Inter; font-size: 14px;">
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 24px;">
@@ -121,6 +124,5 @@
 
         </div>
     </div>
-
 </body>
 </html>

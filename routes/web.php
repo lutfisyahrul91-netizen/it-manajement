@@ -78,6 +78,10 @@ Route::middleware(['auth'])->group(function () {
         //route import excel
         Route::post('/monitor/import-excel', [AssetController::class, 'importMonitorExcel'])->name('monitor.import');
 
+        // Route untuk Export Excel & PDF Monitor Admin
+        // Route::get('/admin/monitor/export/excel', [\App\Http\Controllers\AssetController::class, 'exportMonitorExcelAdmin'])->name('admin.monitor.export.excel');
+        // Route::get('/admin/monitor/export/pdf', [\App\Http\Controllers\AssetController::class, 'exportMonitorPdfAdmin'])->name('admin.monitor.export.pdf');
+
     });
 
 

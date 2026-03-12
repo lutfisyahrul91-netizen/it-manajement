@@ -11,6 +11,7 @@
                 <i class='bx bx-bell' style="font-size: 16px; color: #21252B;"></i>
             </div>
             <img src="https://placehold.co/32x32" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" alt="Profile" />
+            
         </div>
     </div>
 
